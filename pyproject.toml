@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "stl-to-gif"
+version = "1.0.0"
+description = ""
+authors = ["Edward Runkel <eddierunkel@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+cycler = "0.10.0"
+imageio = "2.9.0"
+kiwisolver = "1.3.1"
+matplotlib = "3.3.3"
+numpy = "1.19.4"
+numpy-stl = "2.13.0"
+Pillow = "8.0.1"
+pyparsing = "2.4.7"
+python-dateutil = "2.8.1"
+python-utils = "2.4.0"
+six = "1.15.0"
+
+[tool.poetry.dev-dependencies]
+black = "^21.10b0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
