@@ -8,9 +8,7 @@
 ##############################
 
 # Imports
-import os, re, math, sys
-import sys, getopt, shutil
-import numpy as np
+import os, re, math, sys, getopt, shutil
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from stl import mesh
@@ -26,7 +24,9 @@ frames = 25
 duration_frame = 0.1
 
 # Visualization parameters
+background_color = "#f6f6f9"
 init_angle = 0
+line_width = 0.05
 elevation = 0
 rotation_axises = [1.0, 0.0, 0.0]
 rotation_angle = 0
@@ -87,9 +87,13 @@ def createFrames():
     figure = plt.figure()
     axes = mplot3d.Axes3D(figure)
 
+    # Set the background color
+    figure.patch.set_facecolor(background_color)
+    axes.patch.set_facecolor(background_color)
+
     # Add STL vectors to the plot
     axes.add_collection3d(mplot3d.art3d.Poly3DCollection(stl_mesh.vectors,color="blue"))
-    axes.add_collection3d(mplot3d.art3d.Line3DCollection(stl_mesh.vectors,color="black",linewidth=0.5))
+    axes.add_collection3d(mplot3d.art3d.Line3DCollection(stl_mesh.vectors,color="black",linewidth=line_width))
     axes.view_init(elev=35., azim=-45)
 
     # Auto scale to the mesh size
@@ -110,7 +114,6 @@ def createFrames():
         if not os.path.isdir(path):
             raise
 
-    print(f'init_angle: {init_angle}')
     for i in range(frames):    
         # Rotate the view
 
@@ -133,17 +136,12 @@ def createGif():
     imageio.mimsave(outputfile, images, duration = duration_frame)
 
 # Separate the string into a list of floats
-def getList(strlist,separator=","):
-    
+def getList(strlist,separator=","):    
     try:
         valueList = list(map(float,strlist.split(separator)))
-
     except:
         print("Error: Input the values only separated by a comma (,) . I.e: 1,0,0")
         sys.exit(2)
-
-
-    
     return list(map(float,strlist.split(separator)))
 
 
@@ -157,11 +155,14 @@ def main(argv):
     global frames, duration_frame
     
     # Visualization parameters
-    global init_angle, elevation, rotation_axises, rotation_angle, x_offset, y_offset, z_offset
+    global init_angle, line_width, elevation, rotation_axises, rotation_angle, x_offset, y_offset, z_offset, background_color
                
 
     try:
-         opts, args = getopt.getopt(argv,"hi:o:p:n:t:a:e:d:r:",["help","ifile=","ofile=","nframes=", "duration=", "initangle=", "elevation=", "rotation_angle=", "rotation_axis=", "offset=","path="])
+         opts, args = getopt.getopt(
+            argv,"h:i:o:p:n:t:a:l:e:d:r:b:",
+            ["help","ifile=","ofile=","nframes=", "duration=", "initangle=", "line_width=", "elevation=", "rotation_angle=", "rotation_axis=", "offset=", "path="]
+        )
     except getopt.GetoptError:
          print('Error in args')
          sys.exit(2)
@@ -180,12 +181,16 @@ def main(argv):
             print("-t arg : Duration (in seconds) of display of each frame (also --duration). Default: 0.1")            
            
             print("-a arg : Starting angle of the first frame (also --initangle). Default: 0")
+            print("-l arg : Line width of the STL (also --line_width). Default: 0.05")
             print("-e arg : Elevation of the STL (also --elevation). Default: 0")
             
             print("-d arg : Degrees to rotate the stl (also --rotation_angle). Default: 0")
             print("-r arg : Specify the rotation axis of the STL (also --rotation_axis). Default: [1,0,0]")
             
             print("--offset arg : Displaces the center from which the STL will revolve. Default: [0,0,0]")
+            print("-b arg: Background color of the gif (also --background_color). Default: #f6f6f9")
+            
+            sys.exit()
 
             sys.exit()
             
@@ -208,12 +213,14 @@ def main(argv):
 
         elif opt in ("-a", "--initangle"):
             init_angle = float(arg)
+
+        elif opt in ("-l", "--line_width"):
+            line_width = float(arg)
             
         elif opt in ("-e", "--elevation"):
             elevation = float(arg)    
                 
         elif opt in ("-d", "--rotation_angle"):
-            print('asdawd')
             rotation_angle = float(arg)     
                                 
         elif opt in ("-r", "--rotation_axis"):            
@@ -225,6 +232,9 @@ def main(argv):
             x_offset = offsets[0]
             y_offset = offsets[1]
             z_offset = offsets[2]
+
+        elif opt in ("-b", "--background_color"):
+            background_color = arg
     
     
     initialize()
