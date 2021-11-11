@@ -12,8 +12,8 @@ This repository contains a Python script to create a gif file from a STL file. T
 #### Basics
 Open a terminal and run the python script passing the STL filename with the `-i` option as follow:
 
-    python STL-To-Gif.py -i inputfile
-    python STL-To-Gif.py -i inputfile -o outputfile
+    python app.py -i inputfile
+    python app.py -i inputfile -o outputfile
 
 #### Modifying the gif
 For those of you interested in changing the gif's properties, you have available the following options:
