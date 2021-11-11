@@ -19,6 +19,7 @@ python-utils = "2.4.0"
 six = "1.15.0"
 
 [tool.poetry.dev-dependencies]
+black = "^21.10b0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
